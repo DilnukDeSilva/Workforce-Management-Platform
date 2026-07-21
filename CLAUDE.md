@@ -62,16 +62,18 @@ TODO: no design system defined yet — this is the default Vite React scaffold s
 
 ## Git Commit Rules (MANDATORY)
 
-- NEVER add "Co-Authored-By" lines to commit messages
-- NEVER mention Claude, AI, or any AI assistant in commits
-- Commit messages should only contain the change description
-- No AI attribution in any form
+- **NEVER run `git commit` (or `git push`) — the user commits their own work.** Stage or leave changes as-is and stop; do not create commits under any circumstance, including at the end of a slice or `/merge-ready`. If a workflow step below says "commit," treat that as "stop and hand back to the user for review," not as permission to run `git commit`.
+- If asked to draft a commit message, follow these rules but leave the actual `git commit` invocation to the user:
+  - NEVER add "Co-Authored-By" lines to commit messages
+  - NEVER mention Claude, AI, or any AI assistant in commits
+  - Commit messages should only contain the change description
+  - No AI attribution in any form
 
 ## Working Rules
 
 - Explore code before making changes
 - Prefer minimal diffs; no broad refactors unless requested
-- Always commit after completing implementation — do NOT push unless explicitly requested
+- Do NOT commit or push — see Git Commit Rules above
 
 ---
 
