@@ -81,7 +81,7 @@ Each agent has a narrow, explicit tool permission set (e.g. most reviewers are r
 
 ### How to give a requirement
 
-Just describe what you want in plain language — you don't write the PRD, use cases, or test cases yourself; the agents do.
+Just describe what you want in plain language — you don't write the PRD, use cases, or test cases yourself; the agents do. For anything beyond a trivial change, filling in [`docs/requirement-template.md`](docs/requirement-template.md) first and handing that to Claude will produce a more accurate PRD and use cases than a one-line request.
 
 ```
 Add a feature so managers can approve or reject employee time-off requests.
