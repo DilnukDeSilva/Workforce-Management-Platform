@@ -412,9 +412,13 @@ const BASH_RULES = [
   },
 ];
 
+// Checked per command segment, so `cd x && git check-ignore server/.env` is allowed
+// while `git check-ignore server/.env && cat server/.env` is still denied.
 function readsSecretFile(cmd) {
-  if (/^\s*(git\s+(check-ignore|status|ls-files)|ls)\b/.test(cmd)) return false;
-  return /(^|[\s'"=<>/])\.env(?!\.(example|sample|template)\b)(\.[\w.-]+)?(?=$|[\s'";|&)])/.test(cmd);
+  return cmd.split(/&&|\|\||;|\||\n/).some((seg) => {
+    if (/^\s*(git\s+(check-ignore|status|ls-files)|ls)\b/.test(seg)) return false;
+    return /(^|[\s'"=<>/])\.env(?!\.(example|sample|template)\b)(\.[\w.-]+)?(?=$|[\s'";|&)])/.test(seg);
+  });
 }
 
 function addsDependency(cmd) {

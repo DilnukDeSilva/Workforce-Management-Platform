@@ -30,5 +30,6 @@ For each FAIL: fix it (classify per error-recovery rules), re-run **only** that 
 1. Fill `review.md` (gate table, fixes, residual risks, suggested commit commands for any review fixes).
 2. Changelog: run `date -u +'%Y-%m-%d %H:%M'`, then delegate to `doc-updater` (changelog mode) per `.claude/rules/changelog.md`. A changelog failure is a WARNING, not a blocker.
 3. `npm run aidlc -- ready release`.
-4. Update the *Current status* table in `docs/PROJECT_CONTEXT.md` §6 for this work item.
-5. **STOP.** Report the gate table and ask the user to commit outstanding changes, open/merge the PR, and run `npm run aidlc -- approve release`. Suggest `/retro`, and name the next phase from `PROJECT_CONTEXT.md` §5, without starting it.
+4. Write or update the feature guide `features/<phase-or-feature>.md` (template: `features/README.md`): what it does, how it works, files, how to run and test it, what to understand. One guide per feature/phase; a phase built by several work items shares one guide.
+5. Update the *Current status* table in `docs/PROJECT_CONTEXT.md` §6 for this work item.
+6. **STOP.** Strictly do not commit or push. Report the gate table and ask the user to commit outstanding changes, open/merge the PR, and run `npm run aidlc -- approve release`. Suggest `/retro`, and name the next phase from `PROJECT_CONTEXT.md` §5, without starting it.
