@@ -29,6 +29,6 @@ Claude Code's tools have silent truncation behaviors. These rules prevent you fr
   4. Dynamic imports and `require()` calls
   5. Re-exports and barrel/index file entries
   6. Test files and mocks that reference the symbol
-  7. Configuration files (tsconfig paths, webpack aliases, package.json scripts)
-- After all renames: run the project's typecheck command — type errors reveal missed references
+  7. Configuration files (vite config, package.json scripts)
+- After all renames: run `npm run verify -- --quick` — there is no typechecker in this JS project, so tests and lint are the safety net
 - Do NOT assume a single grep caught everything

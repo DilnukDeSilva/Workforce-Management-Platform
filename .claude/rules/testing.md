@@ -1,24 +1,26 @@
+---
+paths:
+  - "server/**"
+  - "client/**"
+  - "**/*.test.*"
+  - "docs/features/**/test-cases.md"
+  - "docs/features/**/plan.md"
+---
 # Testing Rules
 
-## Test Locations
-
-- Unit/integration tests: not yet established — no `tests/` directory exists in `client/` or `server/`.
-- QA test case docs: `docs/qa/`
-- Use case docs: `docs/use-cases/`
+## Runners (chosen for interview recognisability; confirmed at the MongoDB design gate)
+- **Server:** Jest + supertest. Tests in `server/tests/`, named `<name>.test.js`, driving the exported `app` (no listening port). Added by `mongodb-backend-connection` U1.
+- **Client:** Vitest + React Testing Library (Jest-compatible API, Vite-native). Added by the first work item with UI (auth).
+- Until a runner exists, `npm run verify` reports that step as SKIP with the reason.
 
 ## Commands
+- `npm run verify` runs everything. `--quick` skips the production build.
+- `npm test --workspace server` / `npm test --workspace client` once the runners are configured.
 
-- Tests: not configured yet. `server`'s `npm test` is a stub that exits 1; `client` has no test script at all.
-- Typecheck: none — this is a plain JS/JSX project, no TypeScript.
-- Lint: `npm run lint --workspace client` (oxlint).
-- Build: `npm run build --workspace client` (vite build); `server` has no build step.
-
-TODO: introduce a real test runner (e.g. Vitest for `client`, Jest or `node:test` for `server`) before the `test-writer`/`build-runner`/`e2e-runner` agents have anything to actually run.
-
-## Requirements
-
-- New API endpoints and business logic MUST have test coverage
-- Follow existing test patterns in the codebase
-- Test cases MUST be documented in `docs/qa/<feature>_test_cases.md` before writing actual tests
-- Use cases MUST be documented in `docs/use-cases/<feature>_use_cases.md` before test cases
-- Cover happy path, error cases, edge cases, and auth boundary cases
+## Conventions
+- Test names carry trace IDs: `TC-1.2 UC-1-E1: rejects a missing MONGODB_URI`.
+- Tests never use the developer's `.env` or database. Unit tests mock Mongoose. Integration tests that need MongoDB use a disposable database the test sets up itself (the mechanism is decided in the first work item that needs it).
+- Assert the response envelope: `success`, `message`, `data`/`errors`, and the status code.
+- No `.only`, no unexplained `.skip`, no real sleeps (use fake timers or events).
+- TDD: write tests first and watch them fail for the right reason.
+- Every UC scenario has a TC in `test-cases.md` (enforced by `aidlc ready design`). Every TC has a test (audited in `/merge-ready`).

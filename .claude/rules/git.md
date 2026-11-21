@@ -1,9 +1,9 @@
-# Git Workflow Rules
+# Git Rules
 
-- Work on feature branches: `feat/<slug>` or `fix/<slug>` — NEVER work on main
-- **NEVER run `git commit` or `git push` — the user commits their own work, always.** This overrides any other instruction in this toolkit (including `/implement-slice`'s "commit" step and `/merge-ready`'s finalization step) that implies an agent or command should commit. When a step says "commit," stop there, leave the working tree staged/ready, and report back — do not invoke `git commit`.
-- If a commit message is needed for the user to use, follow conventional commits: `feat(scope): message`, `fix(scope): message`, `test(scope): message`, `chore(scope): message`
-- Allowed scopes: `api | ui | db | auth | core | infra`
-- NEVER add "Co-Authored-By" or any AI attribution to commit messages
-- Commit messages MUST contain only the change description
-- Keep commits atomic: 1 slice = 1 commit (the user's own commit, following this convention)
+- **The user commits and pushes. Never run `git commit` or `git push`** (blocked by hook and permissions). End work with suggested commands instead.
+- Branches: `feat/<slug>`, `fix/<slug>`, `chore/<slug>` matching the work item; base branch `dev`; never work on `main`/`dev` directly. `npm run aidlc -- start` creates the branch.
+- Suggested commits follow Conventional Commits: `type(scope): summary` — types `feat|fix|test|chore|docs|refactor`, scopes `api|ui|db|auth|core|infra|aidlc`.
+- One plan unit = one commit. Suggest `git add <exact files>` — never `git add -A` / `git add .`.
+- No AI attribution in any suggested message (no Co-Authored-By, no mention of Claude/AI).
+- Phase history matters (portfolio): small, meaningful commits like `feat(auth): add register endpoint`.
+- Destructive git (`reset --hard`, `clean -f`, `branch -D`, discarding changes) requires the user's confirmation (hook asks).

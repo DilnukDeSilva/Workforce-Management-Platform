@@ -1,3 +1,7 @@
+---
+paths:
+  - "CHANGELOG.md"
+---
 # Changelog Rules
 
 This is the single authoritative spec for the project changelog. Every other instruction file that mentions the changelog defers to this document.
@@ -77,20 +81,8 @@ Before writing, check whether an entry with the same feature/fix **name** alread
 
 This guard makes double-writes impossible even if the trigger-ownership heuristics misfire.
 
-## Trigger Ownership — write exactly once per completed unit
+## Trigger Ownership — exactly one entry per work item
 
-Each completed unit of work must produce **exactly one** changelog entry. Ownership of the write is assigned as follows:
-
-- **`/merge-ready`** writes one entry as its finalization step, after all quality gates PASS. This covers any feature or fix taken through the quality gates.
-- **A standalone `/implement-slice`** — invoked directly by the user, NOT driven by `/develop-feature`, and NOT running as a parallel-wave subagent — writes one entry for standalone fixes.
-- **`/develop-feature`** passes a **`no-changelog`** suppression flag to every `/implement-slice` it drives. This applies to BOTH the single-slice-wave direct path AND parallel-wave subagents, so a driven slice NEVER writes the changelog — `/merge-ready` owns the write for the whole feature.
-- **Parallel-wave subagents MUST NOT write to `CHANGELOG.md`** under any circumstances.
-
-### Why ownership is not keyed on "wave context" alone
-
-It is tempting to suppress the slice write whenever a slice runs "inside a wave." That is insufficient: `/develop-feature` runs single-slice waves **directly, with no wave context**, so a wave-context check alone would let those slices write and collide with the `/merge-ready` write. Instead, ownership relies on two explicit mechanisms working together:
-
-1. The explicit **`no-changelog`** flag that `/develop-feature` passes down every path it drives, and
-2. The **idempotency guard**, which collapses any accidental second write into an in-place update.
-
-Together these guarantee exactly one entry per completed unit regardless of how the slice was invoked.
+- **`/merge-ready`** writes the entry (via `doc-updater` in changelog mode) once all gates pass — for features, fixes and chores alike.
+- `/construction` and its parallel unit agents **never** write CHANGELOG.md.
+- The idempotency guard above collapses any accidental second write into an in-place update.
