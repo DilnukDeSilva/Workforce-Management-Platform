@@ -9,9 +9,16 @@
   "scripts": {
     "dev:client": "npm run dev --workspace client",
     "dev:server": "npm run dev --workspace server",
-    "dev": "concurrently -n client,server -c blue,green \"npm:dev:client\" \"npm:dev:server\""
+    "dev": "concurrently -n client,server -c blue,green \"npm:dev:client\" \"npm:dev:server\"",
+    "verify": "node scripts/verify.mjs",
+    "verify:quick": "node scripts/verify.mjs --quick",
+    "aidlc": "node scripts/aidlc/cli.mjs",
+    "test:harness": "node --test \"scripts/aidlc/*.test.mjs\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
