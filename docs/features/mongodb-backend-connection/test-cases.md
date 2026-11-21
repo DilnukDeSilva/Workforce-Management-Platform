@@ -1,6 +1,10 @@
 # Test Cases: MongoDB Backend Connection
 
-> Based on [PRD](../PRD.md) Section 2 and [Use Cases](../use-cases/mongodb-backend-connection_use_cases.md)
+> Based on [requirements](requirements.md) and [use cases](use-cases.md)
+>
+> **How TCs are proven (2026-11-21, after plan-critic review):** startup TCs written as "run `npm run dev:server`" are split in two. The **automated** part runs in Jest with Mongoose, dotenv and `process.exit` mocked: it shows ordering (connect before listen), that listen is never called on rejection, that exit(1) is called, the port default, and the log text. The **live** part (real MongoDB, a real port, the real exit code) is a manual smoke check in plan unit U6, with results recorded in `journal.md`. TC-1.9 is manual/triage only.
+>
+> **Envelope note (2026-11-21):** `GET /api/health` responses use the project envelope, so every `db: "…"` expectation below means `body.data.db`, with `body.success === true`. Test runner: Jest + supertest (`.claude/rules/testing.md`).
 
 ---
 
@@ -113,6 +117,18 @@ No dedicated race-condition/duplicate-request test cases beyond TC-2.4/TC-2.5/TC
 
 ---
 
+## 5. Server Structure & Response Envelope (requirements FR-9)
+
+| # | Use Case | Test Case | Expected Result |
+|---|----------|-----------|-----------------|
+| TC-5.1 | FR-9 (with UC-2) | `GET /api/does-not-exist` against the exported app. | `404`; body `{ success: false, message: "Route not found: GET /api/does-not-exist" }`; no `data` and no stack. |
+| TC-5.2 | FR-9 | A test-only route that throws a plain `Error("boom")` is mounted on the app. | `500`; body `{ success: false, message: "Something went wrong" }`; neither "boom" nor any stack in the body; the error is logged server-side. |
+| TC-5.3 | FR-9 | A test-only route that throws `new ApiError(409, "Conflict", [{ field: "email", message: "taken" }])`, and a request with malformed JSON. | `409` with `{ success: false, message: "Conflict", errors: [...] }`; malformed JSON → `400` failure envelope (honours `err.status` from body-parser) rather than 500. |
+| TC-5.4 | FR-9 (with UC-2) | `GET /api/health`. | Body has exactly `success: true`, a string `message`, and `data: { status: "ok", db: <state> }`. |
+| TC-5.5 | FR-9 | Inspect `server/package.json` and the filesystem after the entry-point switch. | `main`, `scripts.start` and `scripts.dev` reference `src/server.js`; `server/index.js` does not exist. |
+
+---
+
 ## Coverage Summary
 
 | Use Case | Sub-scenarios | Test Cases |
@@ -121,7 +137,8 @@ No dedicated race-condition/duplicate-request test cases beyond TC-2.4/TC-2.5/TC
 | UC-2 | Primary, A1, Error (N/A), EC1, EC2 | TC-2.1, TC-2.2, TC-2.3 (N/A), TC-2.4, TC-2.5 |
 | UC-3 | Primary, A1, E1, EC1, EC2 (N/A) | TC-3.1, TC-3.2, TC-3.3, TC-3.4, TC-3.5 (N/A) |
 | Cross-cutting | Auth (N/A), Concurrency (N/A), Data integrity | TC-4.1 |
+| FR-9 structure & envelope | 404, 500, ApiError/4xx, health envelope, entry point | TC-5.1 – TC-5.5 |
 
 **Total test cases documented: 20** (18 executable test cases + 2 explicitly justified N/A entries: TC-2.3, TC-3.5).
 
-Every UC-1/UC-2/UC-3 scenario and sub-scenario listed in `docs/use-cases/mongodb-backend-connection_use_cases.md` — including all Primary Flows, Alternative Flows, Error Flows, and Edge Cases — has a corresponding entry above; no gaps.
+Every UC-1/UC-2/UC-3 scenario and sub-scenario listed in [use-cases.md](use-cases.md) — including all Primary Flows, Alternative Flows, Error Flows, and Edge Cases — has a corresponding entry above; no gaps.

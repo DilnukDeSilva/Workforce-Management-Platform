@@ -1,6 +1,6 @@
 # Use Cases: MongoDB Backend Connection
 
-> Based on [PRD](../PRD.md) Section 2: MongoDB Backend Connection
+> Based on [requirements](requirements.md) (formerly PRD Section 2)
 
 ---
 
@@ -128,12 +128,13 @@ This feature is backend infrastructure with no end-user UI. The primary "actor" 
 
   Example response, connected:
   ```json
-  { "status": "ok", "db": "connected" }
+  { "success": true, "message": "Service healthy", "data": { "status": "ok", "db": "connected" } }
   ```
   Example response, disconnected (mid-run drop, or startup race, or never-connected state reachable only under UC-2-EC1's non-blocking design):
   ```json
-  { "status": "ok", "db": "disconnected" }
+  { "success": true, "message": "Service healthy", "data": { "status": "ok", "db": "disconnected" } }
   ```
+  (Wrapped in the project response envelope per requirements FR-9; `db` lives at `data.db`.)
 - **Side Effects**: none — read-only status check, does not open new connections or touch application data.
 
 ---

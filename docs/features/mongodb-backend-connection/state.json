@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "slug": "mongodb-backend-connection",
+  "title": "MongoDB Backend Connection",
+  "track": "feature",
+  "branch": "feat/mongodb-backend-connection",
+  "createdAt": "2026-11-20T18:15:56.070Z",
+  "gates": {
+    "requirements": {
+      "status": "approved",
+      "approvedBy": "DilnukDeSilva",
+      "approvedAt": "2026-11-21T02:51:07.140Z",
+      "hashes": {
+        "intent.md": "c117d3877ce23795",
+        "requirements.md": "38d7145ebd0cbf00",
+        "use-cases.md": "72096d73e571f9b4"
+      }
+    },
+    "design": {
+      "status": "approved",
+      "approvedBy": "DilnukDeSilva",
+      "approvedAt": "2026-11-21T02:52:30.149Z",
+      "hashes": {
+        "design.md": "56544ee03e4f200a",
+        "test-cases.md": "2c9d76ca72a46ddc",
+        "plan.md": "f6cd583a5f2536e9"
+      }
+    },
+    "release": {
+      "status": "pending"
+    }
+  },
+  "units": [
+    {
+      "id": "U1",
+      "title": "Server test tooling",
+      "wave": 1,
+      "status": "pending"
+    },
+    {
+      "id": "U2",
+      "title": "Environment example and ignore rules",
+      "wave": 1,
+      "status": "pending"
+    },
+    {
+      "id": "U3",
+      "title": "Config modules (env + database connection)",
+      "wave": 2,
+      "status": "pending"
+    },
+    {
+      "id": "U4",
+      "title": "Express app with central error handling",
+      "wave": 2,
+      "status": "pending"
+    },
+    {
+      "id": "U5",
+      "title": "Health route with live database status",
+      "wave": 3,
+      "status": "pending"
+    },
+    {
+      "id": "U6",
+      "title": "Switch the entry point to `src/server.js`",
+      "wave": 4,
+      "status": "pending"
+    },
+    {
+      "id": "U7",
+      "title": "Setup documentation",
+      "wave": 4,
+      "status": "pending"
+    },
+    {
+      "id": "U8",
+      "title": "Runtime resilience",
+      "wave": 5,
+      "status": "pending"
+    }
+  ],
+  "checks": {},
+  "history": [
+    {
+      "at": "2026-11-20T18:15:56.070Z",
+      "by": "DilnukDeSilva",
+      "event": "started",
+      "note": "feature: MongoDB Backend Connection"
+    },
+    {
+      "at": "2026-11-20T18:16:03.836Z",
+      "by": "DilnukDeSilva",
+      "event": "ready:requirements"
+    },
+    {
+      "at": "2026-11-21T02:20:02.079Z",
+      "by": "DilnukDeSilva",
+      "event": "ready:requirements"
+    },
+    {
+      "at": "2026-11-21T02:51:07.143Z",
+      "by": "DilnukDeSilva",
+      "event": "approved:requirements"
+    },
+    {
+      "at": "2026-11-21T02:51:13.177Z",
+      "by": "DilnukDeSilva",
+      "event": "ready:design"
+    },
+    {
+      "at": "2026-11-21T02:52:30.150Z",
+      "by": "DilnukDeSilva",
+      "event": "approved:design"
+    }
+  ]
+}

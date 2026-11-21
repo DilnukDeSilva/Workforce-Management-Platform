@@ -1,6 +1,6 @@
 # Requirement Template
 
-Copy this, fill it in, and hand it to Claude as your feature request (paste it directly in chat, or save it as a file and point Claude at it). It maps directly onto the fields `prd-writer` and `ba-analyst` need — filling it in up front means less back-and-forth and a more accurate PRD/use-cases on the first pass.
+Copy this, fill it in, and run `/inception` with it (paste it, or save it as a file and pass the path). It becomes the work item's `intent.md` and maps directly onto what `prd-writer` and `ba-analyst` need. Filling it in up front means fewer clarifying questions and a more accurate requirements gate on the first pass.
 
 You don't need every field for a small feature — leave a field as "N/A" rather than skip it, so it's clear it was considered, not missed.
 
@@ -31,7 +31,7 @@ As a <user type>, I want <action> so that <benefit>.
 
 ## Affected Areas
 - **API endpoints**: <new/modified routes, or "N/A">
-- **Database/schema**: <new tables/columns, or "N/A — no DB yet">
+- **Database/schema**: <new collections/fields/indexes (MongoDB), or "N/A">
 - **UI**: <pages/components/flows affected>
 
 ## Known Edge Cases / Error Scenarios
