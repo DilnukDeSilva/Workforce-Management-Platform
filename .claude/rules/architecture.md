@@ -1,14 +1,56 @@
+---
+paths:
+  - "server/**"
+  - "client/**"
+  - "docs/features/**/design.md"
+  - "docs/features/**/plan.md"
+---
 # Architecture Rules
 
-## Project Structure
+Structure and conventions decided in `docs/PROJECT_CONTEXT.md` §3 and §8. Owned by the `architect` agent. Existing code moves into this layout only through plan units, never as drive-by refactors.
 
-- API endpoints: `server/index.js` — currently a single file, no `/routes` split yet.
-- Business logic: not yet separated from route handlers (only one route exists: `GET /api/health`).
-- Data access layer: none — no database is configured yet.
-- External integrations: none.
+## Current state (2026-11-21)
+- `server/index.js`: single Express 5 file (CommonJS), `GET /api/health` only. The `mongodb-backend-connection` work item moves it into `server/src/`.
+- `client/`: React 19 + Vite default scaffold. No router, API layer or styling system yet.
 
-As the server grows, split routes/services/models out of `server/index.js` and update this section to describe the actual boundaries.
+## Server layout (`server/src/`, CommonJS)
+```
+server/src/
+  server.js            # entry: load env, connect DB, app.listen — nothing else
+  app.js               # build the express app: middleware, mount routes, 404 + error handler; exported for tests
+  config/              # db.js (Mongoose connection), env.js (read + validate process.env once)
+  routes/              # <area>.routes.js: URL + middleware chain → controller
+  controllers/         # <area>.controller.js: read validated input, call model/service, send response
+  models/              # <Entity>.js: Mongoose schema, indexes, model methods
+  middleware/          # auth.js, role.js, validate.js, errorHandler.js, notFound.js
+  services/            # optional: only when logic is shared by several controllers or too big for one
+  utils/               # ApiError, asyncHandler (if needed), response helpers, token helpers
+server/tests/          # mirrors src/: <name>.test.js
+```
+- Dependency direction: `routes → controllers → (services) → models`. Models never import controllers; routes contain no logic.
+- `app.js` never calls `listen()`, so tests drive it with `supertest` without a port.
+- Config: read `process.env` only in `config/env.js` (validate required vars at startup, fail loud). Everything else imports from it.
 
-## Hard Constraints
+## API conventions
+- REST under `/api/<resource>`, plural nouns, standard verbs. Status codes: 200, 201, 204, 400 (validation), 401 (not authenticated), 403 (not allowed), 404, 409 (conflict/duplicate), 500.
+- **Response envelope (every endpoint, including health):**
+  - success: `{ "success": true, "message": "Human-readable summary", "data": <payload or null> }`
+  - failure: `{ "success": false, "message": "Human-readable error", "errors": [{ "field": "email", "message": "..." }] }` (`errors` only for validation)
+- Controllers throw `ApiError(status, message, errors?)`. One `errorHandler` middleware turns errors into the failure envelope. Unknown errors → 500 with a generic message (details only in server logs).
+- Validate request input in `middleware/validate.js` with a schema before it reaches the controller. Never pass `req.body` objects straight into Mongoose queries.
 
-TODO: no cross-module boundaries exist yet since the backend is a single file. Define constraints here once the codebase grows past that point (e.g. routes must not contain business logic, no direct DB access from route handlers, etc.).
+## Client layout (`client/src/`)
+```
+components/   reusable UI (Button, Input, ProtectedRoute, Layout)
+pages/        one component per route (LoginPage, DashboardPage)
+hooks/        custom hooks (useAuth, useFetch)
+services/     api.js (one Axios instance + interceptors) and <area>.service.js call wrappers
+context/      AuthContext and other app-wide state (Context API; Redux only if truly needed)
+utils/  assets/  styles/
+```
+- Components never call Axios directly; they use `services/` (directly or through a hook).
+- Base URL from `import.meta.env.VITE_API_URL`. Routing with React Router; forms with React Hook Form; styling with Tailwind (from the first UI work item).
+- Every data-driven screen handles loading, error, empty and success states.
+
+## Decided libraries (still installed per work item, with the user's confirmation)
+Server: express, mongoose, dotenv, cors, bcrypt, jsonwebtoken, cookie-parser, zod (validation, pending auth gate), multer + cloudinary (Phase 11). Client: react-router-dom, axios, react-hook-form, tailwindcss, recharts (Phase 9). Anything not on this list is a design decision for the user.

@@ -14,7 +14,7 @@ Typos, import errors, and syntax issues. Fix immediately without counting agains
 - Missing semicolons, mismatched brackets, misspelled identifiers
 - Wrong casing in import paths on case-sensitive filesystems
 
-**Action:** Fix and continue. No scratchpad note needed. No retry cost.
+**Action:** Fix and continue. No journal note needed. No retry cost.
 
 ### Rule 2 — Auto-Add (Free)
 
@@ -26,7 +26,7 @@ Missing validation, error handling, or null checks required for correctness. Add
 - A function can receive null but doesn't handle it — add null check
 - Missing try/catch around an async operation that can throw
 
-**Action:** Fix, note what was added in `.claude/scratchpad.md`, continue. No retry cost.
+**Action:** Fix, note what was added in the work item's `journal.md`, continue. No retry cost.
 
 ### Rule 3 — Auto-Resolve (Costs 1 Retry)
 
@@ -38,7 +38,7 @@ Dependency conflicts, version mismatches, and configuration issues blocking prog
 - Config file pointing to wrong path or port — fix the config
 - Test fixture using outdated schema — update fixture to match current schema
 
-**Action:** Resolve, document the resolution in `.claude/scratchpad.md`, continue. Costs 1 retry attempt.
+**Action:** Resolve, document the resolution in the work item's `journal.md`, continue. Costs 1 retry attempt.
 
 ### Rule 4 — Escalate (Stop)
 
@@ -54,10 +54,10 @@ Architectural decisions, new dependencies, API contract changes, or schema migra
 
 ## Retry Budget
 
-- Maximum **3 retries per slice** (not per verification step)
+- Maximum **3 retries per unit** (not per verification step)
 - Rules 1-2 are free — they do not consume retries
 - Rules 3-4 consume 1 retry each
-- After 3 retries exhausted: document the blocker in `.claude/scratchpad.md` and report to user
+- After 3 retries exhausted: mark the unit `blocked` (`npm run aidlc -- unit U<n> blocked --note "..."`), document it in `journal.md`, and report to the user
 
 ## Error Classification
 
@@ -72,39 +72,32 @@ Architectural decisions, new dependencies, API contract changes, or schema migra
 - Do NOT just report failures — attempt to fix them first
 - If a code review or security audit finds issues: fix them before proceeding (classify each issue under the appropriate rule)
 
-## Mid-Slice Verification
+## Mid-Unit Verification
 
-When a slice requires editing 4 or more files:
-- Run the project's typecheck command after every 3 file edits before continuing
-- If typecheck fails mid-slice: fix the type errors immediately before editing more files
-- This prevents cascading errors that are harder to diagnose at end-of-slice verification
-
-For slices touching 3 or fewer files: end-of-slice verification is sufficient.
-
-Deviation rules apply identically to errors found during mid-slice verification.
+The post-edit hook syntax-checks/lints every edited file automatically. When a unit edits 4 or more files, also run `npm run verify -- --quick` after every 3 edits. Deviation rules apply identically to errors found mid-unit.
 
 ## Parallel Wave Execution
 
-When multiple slices execute in parallel (same wave, different subagents):
+When multiple units execute in parallel (same wave, different subagents):
 
 ### Independent Retry Budgets
 - Each subagent has its own 3-retry budget, tracked independently
 - One subagent exhausting its retries does NOT affect siblings
 - Deviation rules (1-4) apply identically within each subagent
-- Mid-slice verification applies identically within each subagent
+- Mid-unit verification applies identically within each subagent
 
 ### Failure Isolation
 - A failing subagent does NOT cause other subagents in the wave to stop — they continue independently
 - File conflicts cannot occur because wave assignment guarantees exclusive file ownership per wave
-- Each subagent commits only its own files — successful commits from siblings are preserved, never rolled back
+- Each subagent edits only its own unit's files — successful siblings' changes are kept, never reverted
 
 ### Post-Wave Result Collection
 After all subagents in a wave complete, the orchestrator collects results and takes action:
 
-- **All succeeded** → update scratchpad, proceed to next wave
-- **Some failed** → report failures with slice numbers, error categories (per deviation rules), and retry counts. Present escalation options:
-  1. **Retry** — re-run failed slice(s) only with fresh retry budget
-  2. **Continue** — proceed to next wave, address failures later
+- **All succeeded** → record units done, hand the wave back for the user to commit
+- **Some failed** → report failures with unit numbers, error categories (per deviation rules), and retry counts. Present escalation options:
+  1. **Retry** — re-run failed unit(s) only with fresh retry budget
+  2. **Continue** — proceed with the next wave only if it does not depend on the failed unit
   3. **Abort** — stop implementation, report as blocker
 - **All failed** → report as blocker, stop and ask user
 
