@@ -162,9 +162,9 @@ _Last updated: 2026-11-21_
 | Project idea, stack, build order | ✅ Decided (this file) |
 | AI-DLC development harness | ✅ Built: gates, guardrails, `npm run verify` ([guide](aidlc/README.md)) |
 | Phase 1: React (Vite) + Express scaffold | ✅ Done (`client/`, `server/src/`) |
-| Phase 1: MongoDB connection | 🟡 Built and tested (work item [`mongodb-backend-connection`](features/mongodb-backend-connection/), 8/8 units); awaiting your commits, `/merge-ready` and the release gate |
+| Phase 1: MongoDB connection | 🟡 Built and tested (work item [`mongodb-backend-connection`](features/mongodb-backend-connection/), 8/8 units). `/merge-ready` done, all review gates pass; release gate ready for your approval |
 | Phase 1: target folder structure (§3) | ✅ `server/src/{server.js, app.js, config, routes, controllers, middleware, utils}` + `server/tests/` |
-| Phase 1: test setup | ✅ Jest + supertest (server), 44 tests |
+| Phase 1: test setup | ✅ Jest + supertest (server), 51 tests |
 | Phase 1: ESLint / Prettier | ✅ ESLint (server), oxlint (client), Prettier (both); all part of `npm run verify` |
 | Feature guides | ✅ [`features/`](../features/): one plain-language guide per feature ([Project setup](../features/project-setup.md)) |
 | Feature 01: Authentication spec | ✅ Written (§7), ready for `/inception` after Phase 1 is released |

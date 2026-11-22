@@ -27,7 +27,8 @@
       }
     },
     "release": {
-      "status": "pending"
+      "status": "ready",
+      "readyAt": "2026-11-22T04:11:34.449Z"
     }
   },
   "units": [
@@ -80,7 +81,43 @@
       "status": "done"
     }
   ],
-  "checks": {},
+  "checks": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-11-22T04:05:31.405Z",
+      "note": "all steps PASS (client tests SKIP: no runner yet)"
+    },
+    "hygiene": {
+      "result": "warn",
+      "at": "2026-11-22T04:05:54.275Z",
+      "note": "right branch, no secret files changed; diff also has harness fixes and ESLint/Prettier (user-requested, journaled, outside plan.md)"
+    },
+    "integration": {
+      "result": "pass",
+      "at": "2026-11-22T04:06:17.708Z",
+      "note": "U1-U8 present, no stubs, entry + routes wired"
+    },
+    "code-review": {
+      "result": "pass",
+      "at": "2026-11-22T04:06:23.020Z",
+      "note": "0 blockers, 0 majors, 3 minors (listen error, PORT fallback, guard subshell)"
+    },
+    "traceability": {
+      "result": "pass",
+      "at": "2026-11-22T04:06:30.331Z",
+      "note": "all UC scenarios to TC to test; 7 minor naming/strength notes"
+    },
+    "docs": {
+      "result": "pass",
+      "at": "2026-11-22T04:06:43.655Z",
+      "note": "CLAUDE.md commands block updated; everything else accurate"
+    },
+    "security": {
+      "result": "pass",
+      "at": "2026-11-22T04:11:03.691Z",
+      "note": "round 2: all 5 findings fixed, prod audit clean; guard redirect gap fixed after"
+    }
+  },
   "history": [
     {
       "at": "2026-11-20T18:15:56.070Z",
@@ -192,6 +229,51 @@
       "at": "2026-11-21T07:46:24.200Z",
       "by": "DilnukDeSilva",
       "event": "unit:U8:done"
+    },
+    {
+      "at": "2026-11-22T04:05:31.405Z",
+      "by": "DilnukDeSilva",
+      "event": "check:verify:pass"
+    },
+    {
+      "at": "2026-11-22T04:05:54.275Z",
+      "by": "DilnukDeSilva",
+      "event": "check:hygiene:warn"
+    },
+    {
+      "at": "2026-11-22T04:06:17.709Z",
+      "by": "DilnukDeSilva",
+      "event": "check:integration:pass"
+    },
+    {
+      "at": "2026-11-22T04:06:23.021Z",
+      "by": "DilnukDeSilva",
+      "event": "check:code-review:pass"
+    },
+    {
+      "at": "2026-11-22T04:06:30.332Z",
+      "by": "DilnukDeSilva",
+      "event": "check:traceability:pass"
+    },
+    {
+      "at": "2026-11-22T04:06:43.656Z",
+      "by": "DilnukDeSilva",
+      "event": "check:docs:pass"
+    },
+    {
+      "at": "2026-11-22T04:08:12.317Z",
+      "by": "DilnukDeSilva",
+      "event": "check:security:fail"
+    },
+    {
+      "at": "2026-11-22T04:11:03.692Z",
+      "by": "DilnukDeSilva",
+      "event": "check:security:pass"
+    },
+    {
+      "at": "2026-11-22T04:11:34.449Z",
+      "by": "DilnukDeSilva",
+      "event": "ready:release"
     }
   ]
 }

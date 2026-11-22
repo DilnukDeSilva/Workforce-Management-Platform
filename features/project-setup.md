@@ -37,7 +37,7 @@ flowchart LR
 | `server/src/middleware/notFound.js` | Turns an unmatched URL into a 404 `ApiError`. |
 | `server/src/middleware/errorHandler.js` | The one place errors become JSON responses. |
 | `server/src/utils/ApiError.js` | An `Error` that carries an HTTP status (and optional field errors). |
-| `server/tests/*.test.js` | 44 Jest + supertest tests (no real database needed). |
+| `server/tests/*.test.js` | 51 Jest + supertest tests (no real database needed). |
 | `server/.env.example` | Documents `PORT` and `MONGODB_URI`. Copy it to `server/.env`, which is never committed. |
 | `server/eslint.config.js`, `.prettierrc.json` | Lint rules (server) and code formatting (whole repo). |
 
@@ -63,7 +63,7 @@ curl localhost:5000/api/health        # → data.db: "connected"
 ```
 
 ```bash
-npm test --workspace server           # 44 tests
+npm test --workspace server           # 51 tests
 npm run lint --workspace server       # ESLint
 npm run format                        # Prettier rewrites client + server code
 npm run verify                        # everything above + client lint/build + harness checks

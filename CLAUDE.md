@@ -18,7 +18,10 @@ npm install                        # all workspaces
 npm run dev                        # client :5173 + server :5000
 npm run verify                     # THE quality gate (harness tests, work items, server, client); --quick skips build
 npm run aidlc -- status            # lifecycle state for the current branch (help: npm run aidlc)
+npm test --workspace server        # Jest + supertest (51 tests)
+npm run lint --workspace server
 npm run lint --workspace client
+npm run format                     # Prettier (whole repo)
 npm run build --workspace client
 ```
 
