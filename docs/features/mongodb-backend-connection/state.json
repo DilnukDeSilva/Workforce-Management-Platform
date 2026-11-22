@@ -27,8 +27,12 @@
       }
     },
     "release": {
-      "status": "ready",
-      "readyAt": "2026-11-22T04:11:34.449Z"
+      "status": "approved",
+      "approvedBy": "DilnukDeSilva",
+      "approvedAt": "2026-11-22T04:48:40.488Z",
+      "hashes": {
+        "review.md": "d4b7617169bbe331"
+      }
     }
   },
   "units": [
@@ -274,6 +278,11 @@
       "at": "2026-11-22T04:11:34.449Z",
       "by": "DilnukDeSilva",
       "event": "ready:release"
+    },
+    {
+      "at": "2026-11-22T04:48:40.489Z",
+      "by": "DilnukDeSilva",
+      "event": "approved:release"
     }
   ]
 }
