@@ -416,8 +416,13 @@ const BASH_RULES = [
 // while `git check-ignore server/.env && cat server/.env` is still denied.
 function readsSecretFile(cmd) {
   return cmd.split(/&&|\|\||;|\||\n/).some((seg) => {
-    if (/^\s*(git\s+(check-ignore|status|ls-files)|ls)\b/.test(seg)) return false;
-    return /(^|[\s'"=<>/])\.env(?!\.(example|sample|template)\b)(\.[\w.-]+)?(?=$|[\s'";|&)])/.test(seg);
+    // Exempt only a plain listing command whose arguments are simple words/paths. Anything else
+    // in the segment (quotes, subshells, `&`, `<(...)`, redirects) loses the exemption, so
+    // `cat ';ls' server/.env` or `ls <(cat .env)` can't sneak through.
+    if (/^\s*(git\s+(check-ignore|status|ls-files)|ls)(\s+[\w./:=-]+)*\s*$/.test(seg)) return false;
+    // Best effort: a regex can't see every shell expansion (globs, quote-splitting), so the
+    // `Read(**/.env*)` deny rules in .claude/settings.json are the second layer.
+    return /(^|[\s'"=<>/{,])\.env(?!\.(example|sample|template)\b)(\.[\w.-]+)?(?=$|[\s'";|&)`<>,}])/.test(seg);
   });
 }
 
