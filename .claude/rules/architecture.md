@@ -10,7 +10,8 @@ paths:
 Structure and conventions decided in `docs/PROJECT_CONTEXT.md` §3 and §8. Owned by the `architect` agent. Existing code moves into this layout only through plan units, never as drive-by refactors.
 
 ## Current state (2026-11-21)
-- `server/index.js`: single Express 5 file (CommonJS), `GET /api/health` only. The `mongodb-backend-connection` work item moves it into `server/src/`.
+- `server/src/`: entry `server.js` (env → connect DB → listen), `app.js`, `config/{env,db}.js`, health route/controller, `notFound` + `errorHandler`, `utils/ApiError.js`. Tests in `server/tests/` (Jest + supertest).
+- Lint/format: ESLint flat config in `server/eslint.config.js`, oxlint in the client, one root Prettier config (`.prettierrc.json`). Run `npm run format` before handing back.
 - `client/`: React 19 + Vite default scaffold. No router, API layer or styling system yet.
 
 ## Server layout (`server/src/`, CommonJS)
@@ -53,4 +54,4 @@ utils/  assets/  styles/
 - Every data-driven screen handles loading, error, empty and success states.
 
 ## Decided libraries (still installed per work item, with the user's confirmation)
-Server: express, mongoose, dotenv, cors, bcrypt, jsonwebtoken, cookie-parser, zod (validation, pending auth gate), multer + cloudinary (Phase 11). Client: react-router-dom, axios, react-hook-form, tailwindcss, recharts (Phase 9). Anything not on this list is a design decision for the user.
+Server: express, mongoose, dotenv, cors, bcrypt, jsonwebtoken, cookie-parser, zod (validation, pending auth gate), multer + cloudinary (Phase 11). Client: react-router-dom, axios, react-hook-form, tailwindcss, recharts (Phase 9). Tooling: jest, supertest, eslint (+ @eslint/js, globals, eslint-config-prettier), prettier, nodemon, oxlint (client). Anything not on this list is a design decision for the user.

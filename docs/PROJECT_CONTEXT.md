@@ -161,10 +161,12 @@ _Last updated: 2026-11-21_
 |------|--------|
 | Project idea, stack, build order | ✅ Decided (this file) |
 | AI-DLC development harness | ✅ Built: gates, guardrails, `npm run verify` ([guide](aidlc/README.md)) |
-| Phase 1: React (Vite) + Express scaffold | ✅ Done (`client/`, `server/index.js` with `GET /api/health`) |
-| Phase 1: MongoDB connection | 🟡 Work item [`mongodb-backend-connection`](features/mongodb-backend-connection/): docs done, requirements gate ready for approval, no code yet |
-| Phase 1: target folder structure (§3) | ⬜ Created by the MongoDB work item (U3–U5 move the server into `server/src/`) |
-| Phase 1: ESLint / Prettier | ⬜ Optional: client has oxlint; server linting is a future chore |
+| Phase 1: React (Vite) + Express scaffold | ✅ Done (`client/`, `server/src/`) |
+| Phase 1: MongoDB connection | 🟡 Built and tested (work item [`mongodb-backend-connection`](features/mongodb-backend-connection/), 8/8 units). `/merge-ready` done, all review gates pass; release gate ready for your approval |
+| Phase 1: target folder structure (§3) | ✅ `server/src/{server.js, app.js, config, routes, controllers, middleware, utils}` + `server/tests/` |
+| Phase 1: test setup | ✅ Jest + supertest (server), 51 tests |
+| Phase 1: ESLint / Prettier | ✅ ESLint (server), oxlint (client), Prettier (both); all part of `npm run verify` |
+| Feature guides | ✅ [`features/`](../features/): one plain-language guide per feature ([Project setup](../features/project-setup.md)) |
 | Feature 01: Authentication spec | ✅ Written (§7), ready for `/inception` after Phase 1 is released |
 
 ### Phase → work item map
@@ -177,7 +179,7 @@ _Last updated: 2026-11-21_
 | 4–14 | one work item per phase, each starting from a spec in the §7 template | feature (small polish items use `chore`) |
 
 **Next steps, in order:**
-1. Approve the MongoDB work item's gates and build it with `/construction`. That finishes Phase 1.
+1. Commit the MongoDB work (suggested commands in the hand-back), run `/merge-ready`, then approve the `release` gate. That closes Phase 1.
 2. `/inception` for Phase 2, using §7 as the request. Answer the open decisions (§7) at the requirements gate.
 3. Then Phase 3, Phase 4, … one at a time. A phase starts only after the previous one's `release` gate is approved.
 

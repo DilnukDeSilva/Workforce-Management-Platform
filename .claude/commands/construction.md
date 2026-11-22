@@ -9,6 +9,8 @@ Target: `$ARGUMENTS` (default: the lowest wave with pending units)
 
 Precondition: the construction gate is approved (`npm run aidlc -- status` shows phase CONSTRUCTION). If not, stop and point to `/inception` or `/fix`.
 
+**STRICT — DO NOT COMMIT.** Never run `git commit` or `git push`, even when a gate is approved, a wave is green, or a doc/agent says "commit". Approval is not permission to commit. Every hand-back ends with the line *"I have not committed anything. Review the diff and run the commands below yourself."*
+
 **Commit boundary:** you never commit. Each unit ends with a verified working tree and a suggested commit command; the user reviews and commits. Because of that, run **one wave per invocation**, then stop.
 
 ## 1. Select work

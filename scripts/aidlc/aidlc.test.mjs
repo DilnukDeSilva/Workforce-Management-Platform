@@ -52,6 +52,16 @@ describe('decideBash', () => {
     deny('source .env.local');
     pass('cat server/.env.example');
     pass('git check-ignore server/.env');
+    pass('cd /repo && git check-ignore server/.env && grep -q ^PORT= server/.env.example');
+    deny('git check-ignore server/.env && cat server/.env');
+    deny('git status $(cat server/.env)');
+    deny('ls `cat .env`');
+    deny("cat ';ls' server/.env");
+    deny('ls & cat server/.env');
+    deny('ls <(cat server/.env)');
+    deny('cat server/.env>out');
+    deny('cat server/.env</dev/null');
+    deny('cat server/{.env,x}');
     pass('ls -la server');
   });
 

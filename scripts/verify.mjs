@@ -34,6 +34,7 @@ function jsFiles(dir) {
 
 const server = pkg('server');
 const client = pkg('client');
+const root = pkg('.');
 
 const steps = [
   { name: 'harness: tests', run: () => run(process.execPath, ['--test', 'scripts/aidlc/*.test.mjs']) },
@@ -46,6 +47,16 @@ const steps = [
         .filter((x) => !x.r.ok);
       return { ok: bad.length === 0, out: bad.map((x) => x.r.out).join('\n') };
     },
+  },
+  {
+    name: 'server: lint',
+    skip: !server.scripts?.lint && 'no lint script',
+    run: () => run('npm', ['run', 'lint', '--workspace', 'server']),
+  },
+  {
+    name: 'format: check',
+    skip: !root.scripts?.['format:check'] && 'no format:check script',
+    run: () => run('npm', ['run', 'format:check']),
   },
   {
     name: 'server: tests',

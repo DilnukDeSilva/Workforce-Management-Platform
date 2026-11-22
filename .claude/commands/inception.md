@@ -21,7 +21,7 @@ Inception produces the artifacts the human approves at two gates. **You write no
 3. **Requirements** — delegate to `prd-writer` → `requirements.md` + one index line in `docs/PRD.md`.
 4. **Use cases** — delegate to `ba-analyst` → `use-cases.md`.
 5. `npm run aidlc -- ready requirements`. Fix any reported problem and retry.
-6. **STOP.** Present a ≤10-line summary (scope, actors, FR count, UC count, assumptions needing confirmation), plus a *What to understand* note (2–4 concepts the user should be able to explain) and ask the user to review the three files and run `npm run aidlc -- approve requirements` (or `reject requirements --note "..."`).
+6. **STOP.** Present a ≤10-line summary (scope, actors, FR count, UC count, assumptions needing confirmation), plus a *What to understand* note (2–4 concepts the user should be able to explain) and ask the user to review the three files and run `npm run aidlc -- approve requirements` (or `reject requirements --note "..."`). **Strictly do not commit or push** — approval is not permission; the user commits.
 
 ## Stage B — Design & plan (gate: `design`) — only after `requirements` is approved
 Run 1 and 2 **in parallel** (one message, two Agent calls) — they only read the approved requirements:
@@ -32,7 +32,7 @@ Run 1 and 2 **in parallel** (one message, two Agent calls) — they only read th
 5. `plan-critic` → findings on `plan.md`. Fix every CRITICAL/MAJOR in the plan, record the outcome under *Critic review*. One critic pass only.
 6. `npm run aidlc -- ready design` — this enforces traceability (every UC tested and planned) and same-wave file exclusivity. Fix and retry until it passes.
 7. Append key decisions to `journal.md`.
-8. **STOP.** Summarize: verdict, units × waves, risky units (pre-review), anything descoped, and *What to understand*: the key design decisions with their interview one-liners. Ask the user to review `design.md`, `test-cases.md`, `plan.md` and run `npm run aidlc -- approve design`. Approval registers the units and unlocks `/construction`.
+8. **STOP.** Summarize: verdict, units × waves, risky units (pre-review), anything descoped, and *What to understand*: the key design decisions with their interview one-liners. Ask the user to review `design.md`, `test-cases.md`, `plan.md` and run `npm run aidlc -- approve design`. Approval registers the units and unlocks `/construction`. **Strictly do not commit or push** — approval is not permission; the user commits.
 
 ## Rules
 - Specialist agents write their own artifact; you orchestrate, validate, and summarize. Remove the `<!-- aidlc:template -->` marker only from files that are genuinely complete.

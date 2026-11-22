@@ -32,6 +32,10 @@ import {
   waveConflicts,
 } from './lib.mjs';
 
+// Printed with every gate result so the rule is in front of both the human and the agent.
+const NO_COMMIT =
+  'STRICT RULE: the AI agent must NOT commit or push. Approval is not permission to commit. You (the human) review the diff and commit.';
+
 const HELP = `AI-DLC — AI-Driven Development Lifecycle
 
 Usage: npm run aidlc -- <command> [args] [--slug <slug>]
@@ -164,6 +168,7 @@ const commands = {
     console.log(`Gate "${gate}" is READY for human review. Artifacts:`);
     for (const a of gateDefs(state).find((g) => g.id === gate).artifacts) console.log(`  - ${FEATURES_DIR}/${state.slug}/${a}`);
     console.log(`\nThe user approves with: npm run aidlc -- approve ${gate}   (or: reject ${gate} --note "...")`);
+    console.log(NO_COMMIT);
   },
 
   approve({ pos, flags }) {
@@ -185,6 +190,7 @@ const commands = {
     if (gateDefs(state).find((g) => g.id === gate).unlocksConstruction) syncUnits(state, true);
     saveState(state);
     console.log(`Approved "${gate}". Phase is now ${derivePhase(state).toUpperCase()}.\nNext: ${nextAction(state)}`);
+    console.log(NO_COMMIT);
   },
 
   reject({ pos, flags }) {
