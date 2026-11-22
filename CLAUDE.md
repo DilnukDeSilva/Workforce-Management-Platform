@@ -8,8 +8,8 @@ A MERN workforce management platform: JWT auth, role-based access (Admin / HR / 
 ## Tech Stack (decided; libraries are added in the phase that needs them)
 - **Frontend:** React 19 + Vite (`client/`), plain JavaScript. Coming: React Router, Axios, Tailwind CSS, React Hook Form, Context API, Recharts.
 - **Backend:** Node.js + Express 5 (`server/`), CommonJS, `cors`, `dotenv`. Coming: bcrypt, jsonwebtoken, cookie-parser, zod.
-- **Database:** MongoDB + Mongoose (installed; connection built by work item `mongodb-backend-connection`).
-- **Testing:** Jest + supertest (server), Vitest + React Testing Library (client). Neither is installed yet.
+- **Database:** MongoDB + Mongoose. `server/src/config/db.js` connects at startup (the server exits if it can't); `GET /api/health` reports `data.db`.
+- **Testing:** Jest + supertest (server, installed; tests in `server/tests/`). Vitest + React Testing Library (client, added with the first UI work item).
 - **Deploy (later):** Vercel (client), Render (server), MongoDB Atlas.
 
 ## Commands
@@ -25,7 +25,9 @@ npm run build --workspace client
 ## Structure
 ```
 client/src/            React app (default Vite scaffold today; target layout in .claude/rules/architecture.md)
-server/index.js        today's single-file server (GET /api/health); moving to server/src/ in Phase 1
+server/src/            server.js (entry: env → connect DB → listen), app.js, config/, routes/, controllers/, middleware/, utils/
+server/tests/          Jest + supertest tests (mock Mongoose; never touch .env or a real DB)
+features/              one plain-language guide per feature (written in /merge-ready)
 server/.env.example    documented env vars (real values in server/.env, which agents never read)
 docs/PROJECT_CONTEXT.md  product vision, roadmap, specs, status
 docs/PRD.md            product overview + feature index
@@ -43,7 +45,7 @@ scripts/               aidlc CLI, verify, harness tests
 ## Environment Variables (`server/.env`, documented in `server/.env.example`)
 ```
 PORT          # default 5000
-MONGODB_URI   # required once the MongoDB connection lands
+MONGODB_URI   # required: the server exits at startup without it
 ```
 
 ## How to work here

@@ -35,49 +35,49 @@
       "id": "U1",
       "title": "Server test tooling",
       "wave": 1,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U2",
       "title": "Environment example and ignore rules",
       "wave": 1,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U3",
       "title": "Config modules (env + database connection)",
       "wave": 2,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U4",
       "title": "Express app with central error handling",
       "wave": 2,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U5",
       "title": "Health route with live database status",
       "wave": 3,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U6",
       "title": "Switch the entry point to `src/server.js`",
       "wave": 4,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U7",
       "title": "Setup documentation",
       "wave": 4,
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "U8",
       "title": "Runtime resilience",
       "wave": 5,
-      "status": "pending"
+      "status": "done"
     }
   ],
   "checks": {},
@@ -112,6 +112,86 @@
       "at": "2026-11-21T02:52:30.150Z",
       "by": "DilnukDeSilva",
       "event": "approved:design"
+    },
+    {
+      "at": "2026-11-21T07:40:19.055Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U1:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:40:19.171Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U2:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:41:41.248Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U1:done"
+    },
+    {
+      "at": "2026-11-21T07:41:41.371Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U2:done"
+    },
+    {
+      "at": "2026-11-21T07:41:46.243Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U3:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:41:46.358Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U4:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:43:44.616Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U3:done"
+    },
+    {
+      "at": "2026-11-21T07:43:44.730Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U4:done"
+    },
+    {
+      "at": "2026-11-21T07:43:44.858Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U5:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:44:26.128Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U5:done"
+    },
+    {
+      "at": "2026-11-21T07:44:26.238Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U6:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:44:26.346Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U7:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:45:54.475Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U6:done"
+    },
+    {
+      "at": "2026-11-21T07:45:54.593Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U7:done"
+    },
+    {
+      "at": "2026-11-21T07:45:54.712Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U8:in-progress"
+    },
+    {
+      "at": "2026-11-21T07:46:24.200Z",
+      "by": "DilnukDeSilva",
+      "event": "unit:U8:done"
     }
   ]
 }
