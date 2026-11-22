@@ -12,9 +12,12 @@ function errorHandler(err, req, res, next) {
 
   // Errors from Express middleware (e.g. malformed JSON from express.json()) carry a
   // 4xx status. They are client mistakes, not server failures, so keep the status (design D10).
+  // Their message is shown only when the library marks it safe (`expose`, set by http-errors);
+  // otherwise a fixed message is sent so internal text can't leak.
   const status = err.status || err.statusCode;
-  if (status >= 400 && status < 500) {
-    return res.status(status).json({ success: false, message: err.message });
+  if (Number.isInteger(status) && status >= 400 && status < 500) {
+    const message = err.expose === true ? err.message : 'Bad request';
+    return res.status(status).json({ success: false, message });
   }
 
   // Anything else is a bug: log the details for us, send a generic message to the client

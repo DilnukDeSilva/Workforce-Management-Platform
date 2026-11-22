@@ -14,6 +14,8 @@ function getEnv() {
     throw new Error('Missing required environment variable: MONGODB_URI. Copy server/.env.example to server/.env.');
   }
 
+  // Intentional: an unset or non-numeric PORT falls back to 5000 (UC-1-A1) instead of failing,
+  // because a wrong port is harmless in development and hosts like Render always set a valid one.
   const port = Number(process.env.PORT) || DEFAULT_PORT;
 
   return { port, mongodbUri };

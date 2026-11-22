@@ -14,7 +14,7 @@ afterAll(() => {
 });
 
 describe('getEnv', () => {
-  test('UC-1: returns the port and MongoDB URI when both are set', () => {
+  test('TC-1.1 UC-1: returns the port and MongoDB URI when both are set', () => {
     process.env.PORT = '4000';
     process.env.MONGODB_URI = 'mongodb://localhost:27017/wfm';
     expect(getEnv()).toEqual({ port: 4000, mongodbUri: 'mongodb://localhost:27017/wfm' });

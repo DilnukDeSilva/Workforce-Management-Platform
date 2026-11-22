@@ -5,8 +5,10 @@ const SERVER_SELECTION_TIMEOUT_MS = 5000;
 
 // Connection URIs can contain a username and password, so they are never logged raw.
 // "mongodb+srv://user:pass@host/db" becomes "mongodb+srv://***@host/db".
+// It hides everything up to the LAST "@", so a password with a raw "/" or "@" (a common
+// cause of connection failures) is still hidden. Hiding a little too much is the safe side.
 function redactUri(text) {
-  return String(text).replace(/\/\/[^@/\s]+@/g, '//***@');
+  return String(text).replace(/(mongodb(?:\+srv)?:\/\/)\S*@/g, '$1***@');
 }
 
 // Listeners live on the shared mongoose.connection, so registering them on every

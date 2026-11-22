@@ -10,7 +10,13 @@ async function start() {
   try {
     const { port, mongodbUri } = getEnv();
     await connectDB(mongodbUri);
-    app.listen(port, () => console.log(`Server listening on port ${port}`));
+    const server = app.listen(port, () => console.log(`Server listening on port ${port}`));
+    // listen() reports problems such as "port already in use" later, as an 'error' event,
+    // so the try/catch can't see them. Handle them the same way: clear log, exit 1.
+    server.on('error', (err) => {
+      console.error(`Server failed to start: ${err.message}`);
+      process.exit(1);
+    });
   } catch (err) {
     // redactUri again as a safety net: credentials must never reach the logs.
     console.error(`Server failed to start: ${redactUri(err.message)}`);

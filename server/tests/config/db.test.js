@@ -35,13 +35,26 @@ describe('redactUri', () => {
     expect(redactUri(SECRET_URI)).toBe('mongodb+srv://***@cluster0.example.net/wfm');
   });
 
+  test.each([
+    ['mongodb://u:pa/ss@h/db', 'mongodb://***@h/db'],
+    ['mongodb://u:p@ss@h/db', 'mongodb://***@h/db'],
+  ])('hides a password containing a raw "/" or "@" (%s)', (uri, expected) => {
+    expect(redactUri(uri)).toBe(expected);
+  });
+
+  test('redacts a URI embedded in a driver error message', () => {
+    expect(redactUri(`failed to reach ${SECRET_URI} after 5000ms`)).toBe(
+      'failed to reach mongodb+srv://***@cluster0.example.net/wfm after 5000ms',
+    );
+  });
+
   test('leaves a URI without credentials unchanged', () => {
     expect(redactUri('mongodb://localhost:27017/wfm')).toBe('mongodb://localhost:27017/wfm');
   });
 });
 
 describe('connectDB', () => {
-  test('UC-1: connects with a bounded server-selection timeout', async () => {
+  test('TC-1.1 TC-1.3 UC-1: connects with a bounded server-selection timeout', async () => {
     const connect = jest.spyOn(mongoose, 'connect').mockResolvedValue(mongoose);
     await connectDB('mongodb://localhost:27017/wfm');
     expect(connect).toHaveBeenCalledWith('mongodb://localhost:27017/wfm', { serverSelectionTimeoutMS: 5000 });
@@ -64,7 +77,7 @@ describe('connectDB', () => {
     expect(error.message).not.toContain('SuperSecret123');
   });
 
-  test('UC-3-EC1: calling connectDB twice registers the connection listeners only once', async () => {
+  test('TC-3.4 UC-3-EC1: calling connectDB twice registers the connection listeners only once', async () => {
     jest.spyOn(mongoose, 'connect').mockResolvedValue(mongoose);
     await connectDB('mongodb://localhost:27017/wfm');
     const afterFirst = mongoose.connection.listenerCount('disconnected');

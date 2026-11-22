@@ -71,4 +71,29 @@ describe('Express app error handling (FR-9)', () => {
     expect(res.body.success).toBe(false);
     expect(typeof res.body.message).toBe('string');
   });
+
+  test('TC-5.3 (D10): a 4xx error not marked safe to expose gets a fixed message', async () => {
+    const res = await request(
+      appWithRoute(() => {
+        throw Object.assign(new Error('internal library detail'), { status: 422 });
+      }),
+    ).get('/test');
+    expect(res.status).toBe(422);
+    expect(res.body).toEqual({ success: false, message: 'Bad request' });
+  });
+
+  test('TC-5.2: a non-integer status is treated as an unexpected error (500)', async () => {
+    const res = await request(
+      appWithRoute(() => {
+        throw Object.assign(new Error('weird'), { status: '404' });
+      }),
+    ).get('/test');
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({ success: false, message: 'Something went wrong' });
+  });
+
+  test('does not advertise Express in the X-Powered-By header', async () => {
+    const res = await request(app).get('/api/does-not-exist');
+    expect(res.headers['x-powered-by']).toBeUndefined();
+  });
 });

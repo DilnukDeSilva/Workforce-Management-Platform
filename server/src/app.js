@@ -8,6 +8,9 @@ const healthRoutes = require('./routes/health.routes');
 // drive it with supertest without opening a port; server.js is what starts it.
 const app = express();
 
+// Don't advertise the framework in every response header (X-Powered-By: Express).
+app.disable('x-powered-by');
+
 app.use(cors());
 app.use(express.json());
 

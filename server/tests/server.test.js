@@ -19,14 +19,16 @@ const SECRET_URI = 'mongodb+srv://admin:SuperSecret123@cluster0.example.net/wfm'
 let exitSpy;
 let listenSpy;
 let errorSpy;
+let fakeServer;
 
 beforeEach(() => {
   process.env = { ...ORIGINAL_ENV, MONGODB_URI: 'mongodb://localhost:27017/wfm' };
   delete process.env.PORT;
+  fakeServer = { on: jest.fn(), close: jest.fn() };
   exitSpy = jest.spyOn(process, 'exit').mockImplementation(() => {});
   listenSpy = jest.spyOn(app, 'listen').mockImplementation((port, callback) => {
     if (callback) callback();
-    return { close: jest.fn() };
+    return fakeServer;
   });
   errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
   jest.spyOn(console, 'log').mockImplementation(() => {});
@@ -45,7 +47,10 @@ describe('start()', () => {
   test('TC-1.1 UC-1: connects to MongoDB before listening', async () => {
     const order = [];
     connectDB.mockImplementation(async () => order.push('connect'));
-    listenSpy.mockImplementation(() => order.push('listen'));
+    listenSpy.mockImplementation(() => {
+      order.push('listen');
+      return fakeServer;
+    });
 
     await start();
 
@@ -89,13 +94,27 @@ describe('start()', () => {
     expect(errorSpy.mock.calls.flat().join(' ')).toContain(reason);
   });
 
-  test('UC-1-E2: the startup error log never contains credentials', async () => {
+  test('TC-1.5 UC-1-E2: the startup error log never contains credentials', async () => {
     process.env.MONGODB_URI = SECRET_URI;
     connectDB.mockRejectedValue(new Error(`server selection failed for ${SECRET_URI}`));
 
     await start();
 
     expect(errorSpy.mock.calls.flat().map(String).join(' ')).not.toContain('SuperSecret123');
+  });
+});
+
+describe('listen errors', () => {
+  test('TC-1.1 UC-1: a listen error such as a port in use logs clearly and exits 1', async () => {
+    connectDB.mockResolvedValue();
+    await start();
+
+    const [event, onError] = fakeServer.on.mock.calls[0];
+    expect(event).toBe('error');
+    onError(Object.assign(new Error('listen EADDRINUSE: address already in use :::5000'), { code: 'EADDRINUSE' }));
+
+    expect(errorSpy).toHaveBeenCalledWith('Server failed to start: listen EADDRINUSE: address already in use :::5000');
+    expect(exitSpy).toHaveBeenCalledWith(1);
   });
 });
 
